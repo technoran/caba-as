@@ -65,6 +65,7 @@ const modal = document.getElementById('bookingModal');
 const bookingForm = document.getElementById('bookingForm');
 const formStep = document.getElementById('bookingFormStep');
 const reviewStep = document.getElementById('bookingReviewStep');
+const paymentStep = document.getElementById('paymentStep');
 const whatsappNumber = '5493854172687';
 
 function setModal(open) {
@@ -74,10 +75,13 @@ function setModal(open) {
   if (!open) {
     formStep.hidden = false;
     reviewStep.hidden = true;
+    paymentStep.hidden = true;
+    document.getElementById('paymentSuccess').hidden = true;
   }
 }
 
 document.getElementById('openBooking').addEventListener('click', () => setModal(true));
+document.getElementById('openInteriorBooking').addEventListener('click', () => setModal(true));
 document.getElementById('closeBooking').addEventListener('click', () => setModal(false));
 modal.addEventListener('click', (event) => {
   if (event.target === modal) setModal(false);
@@ -89,10 +93,33 @@ function formatDate(value) {
   return `${day} de ${monthNames[Number(month) - 1]} de ${year}`;
 }
 
+function getStayDays() {
+  const checkIn = document.getElementById('checkIn').value;
+  const checkOut = document.getElementById('checkOut').value;
+  if (!checkIn || !checkOut || checkOut <= checkIn) return 0;
+  return Math.round((new Date(`${checkOut}T00:00:00`) - new Date(`${checkIn}T00:00:00`)) / 86400000);
+}
+
+function updateStayDays() {
+  const days = getStayDays();
+  document.getElementById('stayDays').textContent = days ? `${days} ${days === 1 ? 'noche' : 'noches'} de estadía` : 'Seleccioná ingreso y egreso para calcular los días.';
+}
+
+document.getElementById('loadLocations').addEventListener('click', () => {
+  document.getElementById('locationField').hidden = false;
+  document.getElementById('loadLocations').classList.add('is-loaded');
+  document.getElementById('loadLocations').querySelector('strong').textContent = '✓';
+});
+document.getElementById('checkIn').addEventListener('change', updateStayDays);
+document.getElementById('checkOut').addEventListener('change', updateStayDays);
+
 bookingForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const checkIn = document.getElementById('checkIn').value;
   const checkOut = document.getElementById('checkOut').value;
+  const location = document.getElementById('location');
+  const adults = document.getElementById('adults').value;
+  const children = document.getElementById('children').value;
   const guestName = document.getElementById('guestName').value;
   if (checkOut <= checkIn) {
     document.getElementById('checkOut').setCustomValidity('La salida debe ser posterior a la entrada.');
@@ -100,14 +127,16 @@ bookingForm.addEventListener('submit', (event) => {
     return;
   }
   document.getElementById('checkOut').setCustomValidity('');
-  const guests = document.getElementById('guests');
+  const stayDays = getStayDays();
+  document.getElementById('reviewLocation').textContent = location.options[location.selectedIndex].text;
   document.getElementById('reviewCheckIn').textContent = formatDate(checkIn);
   document.getElementById('reviewCheckOut').textContent = formatDate(checkOut);
-  document.getElementById('reviewGuests').textContent = guests.options[guests.selectedIndex].text;
+  document.getElementById('reviewDays').textContent = `${stayDays} ${stayDays === 1 ? 'noche' : 'noches'}`;
+  document.getElementById('reviewGuests').textContent = `${adults} mayores · ${children} menores`;
   document.getElementById('reviewName').textContent = guestName;
-  document.getElementById('sendWhatsApp').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hola, soy ${guestName}. Quisiera consultar disponibilidad en Kuyen para el ${formatDate(checkIn)} hasta el ${formatDate(checkOut)}. Somos ${guests.value} huésped${guests.value === '1' ? '' : 'es'}.`)}`;
   formStep.hidden = true;
   reviewStep.hidden = false;
+  paymentStep.hidden = true;
   document.getElementById('progressOne').classList.remove('progress-active');
   document.getElementById('progressTwo').classList.add('progress-active');
 });
@@ -117,6 +146,25 @@ document.getElementById('editBooking').addEventListener('click', () => {
   reviewStep.hidden = true;
   document.getElementById('progressOne').classList.add('progress-active');
   document.getElementById('progressTwo').classList.remove('progress-active');
+});
+
+document.getElementById('payDeposit').addEventListener('click', () => {
+  reviewStep.hidden = true;
+  paymentStep.hidden = false;
+  document.getElementById('progressTwo').classList.remove('progress-active');
+  document.getElementById('progressThree').classList.add('progress-active');
+});
+
+document.getElementById('backToReview').addEventListener('click', () => {
+  paymentStep.hidden = true;
+  reviewStep.hidden = false;
+  document.getElementById('progressThree').classList.remove('progress-active');
+  document.getElementById('progressTwo').classList.add('progress-active');
+});
+
+document.getElementById('confirmPayment').addEventListener('click', () => {
+  document.getElementById('paymentSuccess').hidden = false;
+  document.getElementById('confirmPayment').disabled = true;
 });
 
 const today = new Date().toISOString().split('T')[0];

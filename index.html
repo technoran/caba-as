@@ -56,8 +56,24 @@
       </div>
     </section>
 
+    <section class="interior section-pad" id="interior">
+      <div class="gallery-heading">
+        <div class="section-kicker">03 <span></span> La cabaña por dentro</div>
+        <span class="gallery-hint">Deslizá para recorrerla</span>
+      </div>
+      <div class="carousel interior-carousel">
+        <div class="carousel-track interior-track">
+          <figure class="gallery-slide"><img src="image/hogar/WhatsApp Image 2026-09-10 at 18.40.55 (1).jpeg" alt="Interior de la cabaña Kuyen" loading="lazy"><figcaption><span>01</span> Calidez para quedarse</figcaption></figure>
+          <figure class="gallery-slide"><img src="image/hogar/WhatsApp Image 2026-09-10 at 18.40.55.jpeg" alt="Espacio interior de Kuyen" loading="lazy"><figcaption><span>02</span> Un lugar para compartir</figcaption></figure>
+          <figure class="gallery-slide"><img src="image/hogar/WhatsApp Image 2026-09-10 at 18.40.56.jpeg" alt="Detalle del interior de la cabaña" loading="lazy"><figcaption><span>03</span> Detalles que abrigan</figcaption></figure>
+          <figure class="gallery-slide"><img src="image/hogar/WhatsApp Image 2026-09-10 at 18.43.25.jpeg" alt="Ambiente de la cabaña por dentro" loading="lazy"><figcaption><span>04</span> Tu pausa empieza adentro</figcaption></figure>
+        </div>
+      </div>
+      <div class="interior-action"><p>Conocé cada rincón antes de elegir tus fechas.</p><button class="button button-dark" id="openInteriorBooking" type="button">Conocer las fechas <span aria-hidden="true">→</span></button></div>
+    </section>
+
     <section class="details section-pad">
-      <div class="section-kicker">03 <span></span> Lo que vas a encontrar</div>
+      <div class="section-kicker">04 <span></span> Lo que vas a encontrar</div>
       <div class="details-grid">
         <div class="detail-item"><span class="detail-number">01</span><h3>Para desconectar</h3><p>Silencio, aire puro y noches llenas de estrellas.</p></div>
         <div class="detail-item"><span class="detail-number">02</span><h3>Para compartir</h3><p>Espacios cálidos para cocinar, charlar y quedarse.</p></div>
@@ -76,21 +92,33 @@
   <div class="modal-backdrop" id="bookingModal" aria-hidden="true">
     <div class="booking-modal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
       <button class="close-modal" id="closeBooking" aria-label="Cerrar">×</button>
-      <div class="modal-progress"><span class="progress-active" id="progressOne"></span><span id="progressTwo"></span></div>
+      <div class="modal-progress"><span class="progress-active" id="progressOne"></span><span id="progressTwo"></span><span id="progressThree"></span></div>
       <div id="bookingFormStep">
         <p class="eyebrow">Consultá disponibilidad</p><h2 id="bookingTitle">Planeemos tu<br><em>próxima pausa.</em></h2>
         <form id="bookingForm">
-          <div class="form-row"><label>Entrada<input type="date" id="checkIn" required></label><label>Salida<input type="date" id="checkOut" required></label></div>
-          <div class="form-row"><label>Huéspedes<select id="guests"><option value="1">1 huésped</option><option value="2" selected>2 huéspedes</option><option value="3">3 huéspedes</option><option value="4">4 huéspedes</option></select></label><label>Tu nombre<input type="text" id="guestName" placeholder="¿Cómo te llamás?" required></label></div>
+          <button class="location-button" id="loadLocations" type="button"><span>01</span> Cargar ubicaciones <strong>+</strong></button>
+          <label class="location-field" id="locationField" hidden>Ubicación<select id="location"><option value="yacanto" selected>Yacanto, Córdoba</option><option value="villa-general-belgrano">Villa General Belgrano</option><option value="los-reartes">Los Reartes</option></select></label>
+          <div class="form-row"><label>Ingreso<input type="date" id="checkIn" required></label><label>Egreso<input type="date" id="checkOut" required></label></div>
+          <p class="stay-days" id="stayDays">Seleccioná ingreso y egreso para calcular los días.</p>
+          <div class="form-row"><label>Mayores<input type="number" id="adults" min="1" max="10" value="2" required></label><label>Menores<input type="number" id="children" min="0" max="10" value="0" required></label></div>
+          <div class="form-row"><label>Tu nombre<input type="text" id="guestName" placeholder="¿Cómo te llamás?" required></label></div>
           <button class="button button-dark full-button" type="submit">Revisar solicitud <span aria-hidden="true">→</span></button>
         </form>
         <p class="form-footnote">Te vamos a contactar por WhatsApp para confirmar disponibilidad.</p>
       </div>
       <div id="bookingReviewStep" class="review-step" hidden>
         <p class="eyebrow">Último vistazo</p><h2>Tu solicitud<br><em>está lista.</em></h2>
-        <div class="review-card"><div><span>Entrada</span><strong id="reviewCheckIn"></strong></div><div><span>Salida</span><strong id="reviewCheckOut"></strong></div><div><span>Huéspedes</span><strong id="reviewGuests"></strong></div><div><span>Nombre</span><strong id="reviewName"></strong></div></div>
-        <a class="button button-whatsapp full-button" id="sendWhatsApp" href="#" target="_blank" rel="noreferrer">Enviar por WhatsApp <span aria-hidden="true">↗</span></a>
+        <div class="review-card"><div><span>Ubicación</span><strong id="reviewLocation"></strong></div><div><span>Ingreso</span><strong id="reviewCheckIn"></strong></div><div><span>Egreso</span><strong id="reviewCheckOut"></strong></div><div><span>Estadía</span><strong id="reviewDays"></strong></div><div><span>Huéspedes</span><strong id="reviewGuests"></strong></div><div><span>Nombre</span><strong id="reviewName"></strong></div></div>
+        <button class="button button-mercadopago full-button" id="payDeposit" type="button">Continuar a Mercado Pago <span aria-hidden="true">↗</span></button>
         <button class="back-button" id="editBooking" type="button">← Editar solicitud</button>
+      </div>
+      <div id="paymentStep" class="payment-step" hidden>
+        <p class="eyebrow">Simulación de pago</p><h2>Reservá tu<br><em>próxima pausa.</em></h2>
+        <div class="payment-brand"><span>MP</span><strong>Mercado Pago</strong><small>Entorno de prueba</small></div>
+        <div class="payment-amount"><span>Seña de reserva</span><strong>$ 50.000</strong><small>Este importe es solo demostrativo.</small></div>
+        <button class="button button-mercadopago full-button" id="confirmPayment" type="button">Pagar seña simulada <span aria-hidden="true">→</span></button>
+        <button class="back-button" id="backToReview" type="button">← Volver al resumen</button>
+        <p class="payment-success" id="paymentSuccess" hidden>Pago simulado aprobado. La reserva quedó pendiente de confirmación.</p>
       </div>
     </div>
   </div>
