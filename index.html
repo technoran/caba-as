@@ -16,7 +16,10 @@
       <span class="brand-mark">K</span>
       <span><strong>Kuyen</strong><small>Yacanto · Córdoba</small></span>
     </a>
-    <a class="top-link" href="#reserva">Consultar disponibilidad <span aria-hidden="true">↗</span></a>
+    <div class="top-actions">
+      <button class="season-toggle" id="seasonToggle" type="button" aria-label="Cambiar de estación">Verano <span aria-hidden="true">↗</span></button>
+      <a class="top-link" href="#reserva">Consultar disponibilidad <span aria-hidden="true">↗</span></a>
+    </div>
   </header>
 
   <main>
@@ -45,16 +48,11 @@
 
     <section class="gallery section-pad" id="galeria">
       <div class="gallery-heading">
-        <div class="section-kicker">02 <span></span> Mirá alrededor</div>
-        <div class="gallery-controls"><button class="gallery-arrow" id="prevSlide" aria-label="Foto anterior">←</button><span id="slideCount">01 / 04</span><button class="gallery-arrow" id="nextSlide" aria-label="Foto siguiente">→</button></div>
+        <div class="section-kicker">02 <span></span> Mirá alrededor · <strong id="seasonName">Invierno</strong></div>
+        <div class="gallery-controls"><span id="slideCount">01 / 04</span><span class="gallery-hint">Deslizá para ver más</span></div>
       </div>
       <div class="carousel">
-        <div class="carousel-track" id="carouselTrack">
-          <figure class="gallery-slide is-active"><img src="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1800&q=85" alt="Cabaña de madera rodeada de bosque"><figcaption><span>01</span> Afuera, el paisaje</figcaption></figure>
-          <figure class="gallery-slide"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85" alt="Interior cálido de una cabaña"><figcaption><span>02</span> Adentro, la calma</figcaption></figure>
-          <figure class="gallery-slide"><img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1800&q=85" alt="Camino entre árboles hacia las sierras"><figcaption><span>03</span> El camino también cuenta</figcaption></figure>
-          <figure class="gallery-slide"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1800&q=85" alt="Paisaje de montaña al atardecer"><figcaption><span>04</span> Atardeceres que se quedan</figcaption></figure>
-        </div>
+        <div class="carousel-track" id="carouselTrack"></div>
       </div>
     </section>
 

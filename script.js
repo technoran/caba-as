@@ -1,17 +1,65 @@
-const slides = [...document.querySelectorAll('.gallery-slide')];
 const track = document.getElementById('carouselTrack');
+const carousel = document.querySelector('.carousel');
 const slideCount = document.getElementById('slideCount');
-let currentSlide = 0;
+const seasonToggle = document.getElementById('seasonToggle');
+const seasonName = document.getElementById('seasonName');
+const seasons = {
+  invierno: {
+    label: 'Invierno',
+    nextLabel: 'Verano',
+    hero: 'image/invierno/WhatsApp Image 2026-09-10 at 18.40.56 (4).jpeg',
+    images: [
+      ['image/invierno/WhatsApp Image 2026-09-10 at 18.40.56 (4).jpeg', 'La cabaña en invierno'],
+      ['image/invierno/WhatsApp Image 2026-09-12 at 10.05.07.jpeg', 'Paisaje serrano de invierno'],
+      ['image/invierno/WhatsApp Image 2026-09-12 at 10.05.11.jpeg', 'Detalles de Kuyen en invierno'],
+      ['image/invierno/WhatsApp Image 2026-09-13 at 10.07.00.jpeg', 'Una pausa entre sierras']
+    ]
+  },
+  verano: {
+    label: 'Verano',
+    nextLabel: 'Invierno',
+    hero: 'image/verano/WhatsApp Image 2026-09-10 at 18.40.56 (1).jpeg',
+    images: [
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.56 (1).jpeg', 'La cabaña en verano'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.56 (2).jpeg', 'Luz de verano en Kuyen'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.56 (3).jpeg', 'Naturaleza alrededor'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57 (4).jpeg', 'El paisaje en verano'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57 (1).jpeg', 'Verano entre sierras'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57 (2).jpeg', 'Afuera, el paisaje'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57 (3).jpeg', 'Tiempo al aire libre'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57 (4).jpeg', 'Una tarde en Yacanto'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57.jpeg', 'Cielo abierto'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.43.25 (1).jpeg', 'Calma de verano'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.43.25 (2).jpeg', 'Un rincón para quedarse'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.43.25 (3).jpeg', 'La pausa que buscabas'],
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.43.26.jpeg', 'Atardecer en las sierras']
+    ]
+  }
+};
 
-function moveCarousel(direction) {
-  currentSlide = (currentSlide + direction + slides.length) % slides.length;
-  track.style.transform = `translateX(-${currentSlide * 100}%)`;
-  slides.forEach((slide, index) => slide.classList.toggle('is-active', index === currentSlide));
+let currentSeason = new Date().getMonth() >= 10 || new Date().getMonth() <= 1 ? 'verano' : 'invierno';
+
+function updateSlideCount() {
+  const slides = [...track.children];
+  const currentSlide = Math.min(Math.round(carousel.scrollLeft / carousel.clientWidth), slides.length - 1);
   slideCount.textContent = `${String(currentSlide + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
 }
 
-document.getElementById('nextSlide').addEventListener('click', () => moveCarousel(1));
-document.getElementById('prevSlide').addEventListener('click', () => moveCarousel(-1));
+function renderSeason(season) {
+  const seasonData = seasons[season];
+  currentSeason = season;
+  document.body.dataset.season = season;
+  seasonName.textContent = seasonData.label;
+  seasonToggle.firstChild.textContent = `${seasonData.nextLabel} `;
+  document.querySelector('.hero').style.backgroundImage = `linear-gradient(90deg,rgba(17,28,21,.66),rgba(17,28,21,.12)),url("${seasonData.hero}")`;
+  track.innerHTML = seasonData.images.map(([src, alt], index) => `<figure class="gallery-slide${index === 0 ? ' is-active' : ''}"><img src="${src}" alt="${alt}" loading="${index === 0 ? 'eager' : 'lazy'}"><figcaption><span>${String(index + 1).padStart(2, '0')}</span> ${alt}</figcaption></figure>`).join('');
+  track.scrollLeft = 0;
+  updateSlideCount();
+}
+
+seasonToggle.addEventListener('click', () => renderSeason(currentSeason === 'invierno' ? 'verano' : 'invierno'));
+carousel.addEventListener('scroll', updateSlideCount, { passive: true });
+renderSeason(currentSeason);
 
 const modal = document.getElementById('bookingModal');
 const bookingForm = document.getElementById('bookingForm');
