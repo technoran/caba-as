@@ -7,7 +7,6 @@ const seasons = {
   invierno: {
     label: 'Invierno',
     nextLabel: 'Verano',
-    hero: 'image/invierno/WhatsApp Image 2026-09-10 at 18.40.56 (4).jpeg',
     images: [
       ['image/invierno/WhatsApp Image 2026-09-10 at 18.40.56 (4).jpeg', 'La cabaña en invierno'],
       ['image/invierno/WhatsApp Image 2026-09-12 at 10.05.07.jpeg', 'Paisaje serrano de invierno'],
@@ -18,7 +17,6 @@ const seasons = {
   verano: {
     label: 'Verano',
     nextLabel: 'Invierno',
-    hero: 'image/verano/WhatsApp Image 2026-09-10 at 18.40.56 (1).jpeg',
     images: [
       ['image/verano/WhatsApp Image 2026-09-10 at 18.40.56 (1).jpeg', 'La cabaña en verano'],
       ['image/verano/WhatsApp Image 2026-09-10 at 18.40.56 (2).jpeg', 'Luz de verano en Kuyen'],
@@ -30,9 +28,14 @@ const seasons = {
       ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57 (4).jpeg', 'Una tarde en Yacanto'],
       ['image/verano/WhatsApp Image 2026-09-10 at 18.40.57.jpeg', 'Cielo abierto'],
       ['image/verano/WhatsApp Image 2026-09-10 at 18.43.25 (1).jpeg', 'Calma de verano'],
-      ['image/verano/WhatsApp Image 2026-09-10 at 18.43.25 (2).jpeg', 'Un rincón para quedarse'],
       ['image/verano/WhatsApp Image 2026-09-10 at 18.43.25 (3).jpeg', 'La pausa que buscabas'],
-      ['image/verano/WhatsApp Image 2026-09-10 at 18.43.26.jpeg', 'Atardecer en las sierras']
+      ['image/verano/WhatsApp Image 2026-09-10 at 18.43.26.jpeg', 'Atardecer en las sierras'],
+      ['image/verano/WhatsApp Image 2026-09-14 at 15.30.15 (1).jpeg', 'Un rincón para quedarse'],
+      ['image/verano/WhatsApp Image 2026-09-14 at 15.30.15 (3).jpeg', 'Descanso al aire libre'],
+      ['image/verano/WhatsApp Image 2026-09-14 at 15.30.16 (1).jpeg', 'Luz de verano'],
+      ['image/verano/WhatsApp Image 2026-09-14 at 15.30.16 (2).jpeg', 'La pausa que buscabas'],
+      ['image/verano/WhatsApp Image 2026-09-14 at 15.30.16 (3).jpeg', 'Atardecer en las sierras'],
+      ['image/verano/WhatsApp Image 2026-09-14 at 15.30.16.jpeg', 'Cielo abierto']
     ]
   }
 };
@@ -51,7 +54,6 @@ function renderSeason(season) {
   document.body.dataset.season = season;
   seasonName.textContent = seasonData.label;
   seasonToggle.firstChild.textContent = `${seasonData.nextLabel} `;
-  document.querySelector('.hero').style.backgroundImage = `linear-gradient(90deg,rgba(17,28,21,.66),rgba(17,28,21,.12)),url("${seasonData.hero}")`;
   track.innerHTML = seasonData.images.map(([src, alt], index) => `<figure class="gallery-slide${index === 0 ? ' is-active' : ''}"><img src="${src}" alt="${alt}" loading="${index === 0 ? 'eager' : 'lazy'}"><figcaption><span>${String(index + 1).padStart(2, '0')}</span> ${alt}</figcaption></figure>`).join('');
   track.scrollLeft = 0;
   updateSlideCount();
@@ -62,11 +64,13 @@ carousel.addEventListener('scroll', updateSlideCount, { passive: true });
 renderSeason(currentSeason);
 
 const modal = document.getElementById('bookingModal');
+const conditionsModal = document.getElementById('conditionsModal');
 const bookingForm = document.getElementById('bookingForm');
 const formStep = document.getElementById('bookingFormStep');
 const reviewStep = document.getElementById('bookingReviewStep');
 const paymentStep = document.getElementById('paymentStep');
 const whatsappNumber = '5493854172687';
+const reservationAppUrl = 'https://script.google.com/macros/s/AKfycbw5HIbwuDYXbQ3RVqDCYEh9Yu0DbjjCISXUtbm3tivkQPG0RNgAscRXSlkCQl8hUP07/exec';
 
 function setModal(open) {
   modal.classList.toggle('is-open', open);
@@ -80,12 +84,23 @@ function setModal(open) {
   }
 }
 
-document.getElementById('openBooking').addEventListener('click', () => setModal(true));
-document.getElementById('openInteriorBooking').addEventListener('click', () => setModal(true));
+function setConditionsModal(open) {
+  conditionsModal.classList.toggle('is-open', open);
+  conditionsModal.setAttribute('aria-hidden', String(!open));
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+document.getElementById('openBooking').addEventListener('click', () => setConditionsModal(true));
+document.getElementById('openInteriorBooking').addEventListener('click', () => setConditionsModal(true));
 document.getElementById('closeBooking').addEventListener('click', () => setModal(false));
+document.getElementById('closeConditions').addEventListener('click', () => setConditionsModal(false));
 modal.addEventListener('click', (event) => {
   if (event.target === modal) setModal(false);
 });
+conditionsModal.addEventListener('click', (event) => {
+  if (event.target === conditionsModal) setConditionsModal(false);
+});
+document.getElementById('acceptConditions').addEventListener('click', () => window.location.assign(reservationAppUrl));
 
 function formatDate(value) {
   const [year, month, day] = value.split('-');
@@ -149,10 +164,7 @@ document.getElementById('editBooking').addEventListener('click', () => {
 });
 
 document.getElementById('payDeposit').addEventListener('click', () => {
-  reviewStep.hidden = true;
-  paymentStep.hidden = false;
-  document.getElementById('progressTwo').classList.remove('progress-active');
-  document.getElementById('progressThree').classList.add('progress-active');
+  window.location.assign(reservationAppUrl);
 });
 
 document.getElementById('backToReview').addEventListener('click', () => {
@@ -163,8 +175,7 @@ document.getElementById('backToReview').addEventListener('click', () => {
 });
 
 document.getElementById('confirmPayment').addEventListener('click', () => {
-  document.getElementById('paymentSuccess').hidden = false;
-  document.getElementById('confirmPayment').disabled = true;
+  window.location.assign(reservationAppUrl);
 });
 
 const today = new Date().toISOString().split('T')[0];
