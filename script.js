@@ -70,7 +70,7 @@ const formStep = document.getElementById('bookingFormStep');
 const reviewStep = document.getElementById('bookingReviewStep');
 const paymentStep = document.getElementById('paymentStep');
 const whatsappNumber = '5493854172687';
-const reservationAppUrl = 'https://script.google.com/macros/s/AKfycbzuyRV0UPfPXXbHo7APyT1EDCPk58m3eCQcJWI3FN9spzI_QqS4xGm2QG7Mg3YMFBObEQ/exec';
+const reservationAppUrl = 'https://script.google.com/macros/s/AKfycbwEqD6EO2JxPO1XasG2Y1nO_c8Lq9rTSwQHyfQMKdmgTlm1fS17cKhNVsnbiz6FLBFQpA/exec';
 
 function setModal(open) {
   modal.classList.toggle('is-open', open);
